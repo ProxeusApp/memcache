@@ -1,4 +1,4 @@
-# Go Cache
+# Go Memory Cache
 
 This go cache is running only if there is something to do. No periodically scheduler is running.
 
@@ -6,13 +6,13 @@ This go cache is running only if there is something to do. No periodically sched
 
 ```go
 import(
-	"github.com/futuretekag/cache"
+	"github.com/futuretekag/memcache"
 	"fmt"
 	"time"
 )
 
 func main(){
-	c := cache.NewCache(3 * time.Second)
+	c := memcache.NewCache(3 * time.Second)
 	c.Put("myKey", "my Value")
 	c.PutWithOtherExpiry("myKey", "my Value", 6*time.Second)
 	c.Put(123, 456)
