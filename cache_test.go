@@ -1,18 +1,13 @@
-# Go Cache
+package cache
 
-This go cache is running only if there is something to do. No periodically scheduler is running.
-
-### Usage
-
-```go
 import(
-	"github.com/futuretekag/cache"
+	"testing"
 	"fmt"
 	"time"
 )
 
-func main(){
-	c := cache.NewCache(3 * time.Second)
+func TestNewCache(t *testing.T){
+	c := NewCache(3 * time.Second)
 	c.Put("myKey", "my Value")
 	c.PutWithOtherExpiry("myKey", "my Value", 6*time.Second)
 	c.Put(123, 456)
@@ -23,4 +18,3 @@ func main(){
 	time.Sleep(10*time.Second)
 	fmt.Println(c.Get("myKey"))
 }
-```
