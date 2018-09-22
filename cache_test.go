@@ -6,8 +6,8 @@ import (
 	"time"
 )
 
-func TestNewCache(t *testing.T) {
-	c := NewCache(3 * time.Second)
+func TestNew(t *testing.T) {
+	c := New(3 * time.Second)
 	c.Put("myKey", "my Value")
 	c.PutWithOtherExpiry("myKey2", "my Value2", 8*time.Second)
 	c.PutWithOtherExpiry(123, 456, 10*time.Second)
@@ -54,7 +54,7 @@ func TestNewCache(t *testing.T) {
 func BenchmarkNewCache(b *testing.B) {
 	//TODO impl
 	b.StartTimer()
-	c := NewCache(3 * time.Second)
+	c := New(3 * time.Second)
 	c.Put("myKey", "my Value")
 	c.PutWithOtherExpiry("myKey2", "my Value2", 8*time.Second)
 	c.PutWithOtherExpiry(123, 456, 10*time.Second)

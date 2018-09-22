@@ -13,7 +13,10 @@ import(
 )
 
 func main(){
-	c := memcache.NewCache(3 * time.Second)
+	c := cache.New(3 * time.Second)
+	//or extend expiry on get 'true' | 'false'
+	c = cache.NewExtendExpiryOnGet(3 * time.Second, true)
+
 	c.Put("myKey", "my Value")
 	c.PutWithOtherExpiry("myKey", "my Value", 6*time.Second)
 	c.Put(123, 456)
