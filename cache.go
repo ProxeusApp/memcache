@@ -41,9 +41,12 @@ func (s *Cache) Get(key interface{}, ref interface{}) error{
 			return os.ErrInvalid
 		}
 
+		//update last touch
 		n := time.Now()
+		s.cacheLock.Lock()
 		valueHolder.access = n
 		valueHolder.expiry = valueHolder.access.Add(s.Expiry)
+		s.cacheLock.Lock()
 
 		i := 0
 		for v.Kind() != reflect.Struct && v.Kind() != reflect.Invalid && (!v.CanSet() || v.Type() != reflect.TypeOf(valueHolder.val)) {
