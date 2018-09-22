@@ -30,8 +30,8 @@ type Cache struct {
 	OnExpired           func(key interface{}, val interface{})
 }
 
-func NewCacheExtendExpiryOnGet(expiry time.Duration, defaultExtendExpiry bool) *Cache {
-	c := &Cache{store: make(map[interface{}]*value), defaultExtendExpiry: defaultExtendExpiry}
+func NewCacheExtendExpiryOnGet(expiry time.Duration, extendExpiry bool) *Cache {
+	c := &Cache{store: make(map[interface{}]*value), defaultExtendExpiry: extendExpiry}
 	c.Expiry = expiry
 	return c
 }
