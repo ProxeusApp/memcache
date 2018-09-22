@@ -1,12 +1,13 @@
 # Go Memory Cache
 
-This go cache is running only if there is something to do. No periodically scheduler is running.
+No periodically scheduler is running without your actions.
+It times the cleanup to the next expiry.
 
 ### Usage
 
 ```go
 import(
-	"github.com/futuretekag/memcache"
+	"github.com/ProxeusApp/memcache"
 	"fmt"
 	"time"
 )
@@ -21,6 +22,13 @@ func main(){
 		fmt.Println("on expired", key, val)
 	}
 	time.Sleep(10*time.Second)
-	fmt.Println(c.Get("myKey"))
+
+	var myVal string
+	err := c.Get("myKey", &myVal)
+	if err != nil {
+	    panic(err)
+	}
+	fmt.Println(myVal)
+
 }
 ```

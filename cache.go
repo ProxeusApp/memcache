@@ -3,6 +3,8 @@ package cache
 import (
 	"time"
 	"sync"
+	"reflect"
+	"os"
 )
 
 var secondsAfter time.Duration = 1
@@ -28,18 +30,36 @@ func NewCache(expiry time.Duration) *Cache{
 	return c
 }
 
-func (s *Cache) Get(key interface{}) interface{}{
+func (s *Cache) Get(key interface{}, ref interface{}) error{
 	s.cacheLock.RLock()
 	valueHolder := s.store[key]
 	s.cacheLock.RUnlock()
+
 	if valueHolder != nil {
+		v := reflect.ValueOf(ref)
+		if v.Kind() != reflect.Ptr || v.IsNil() {
+			return os.ErrInvalid
+		}
+
 		n := time.Now()
 		valueHolder.access = n
 		valueHolder.expiry = valueHolder.access.Add(s.Expiry)
-		return valueHolder.val
 
+		i := 0
+		for v.Kind() != reflect.Struct && v.Kind() != reflect.Invalid && (!v.CanSet() || v.Type() != reflect.TypeOf(valueHolder.val)) {
+			v = v.Elem()
+			if i > 3 {
+				break
+			}
+			i++
+		}
+		if !v.CanSet() || v.Kind() != reflect.TypeOf(valueHolder.val).Kind() {
+			return os.ErrInvalid
+		}
+		v.Set(reflect.ValueOf(valueHolder.val))
+		return nil
 	}
-	return nil
+	return os.ErrNotExist
 }
 
 func (s *Cache) Remove(key interface{}) bool{
