@@ -181,6 +181,12 @@ func (s *Cache) stopCleanup() {
 	s.cleanupLock.Unlock()
 }
 
+func (s *Cache) Clean() {
+	s.cacheLock.Lock()
+	s.store = make(map[interface{}]*value)
+	s.cacheLock.Unlock()
+}
+
 func (s *Cache) Close() {
 	s.stopCleanup()
 }
